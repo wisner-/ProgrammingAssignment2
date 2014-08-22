@@ -1,41 +1,34 @@
-## Put comments here that give an overall description of what your
-## functions do
+## Compute inverse of matrix, store result in global cache.
+## When called to compute inverse, returned cached version if exists, else compute.
 
-## From the example code...
-makeVector <- function(x = numeric()) {
+
+## from input matrix x, create special global matrix m as cache to store inverse
+makeCacheMatrix <- function(x = matrix()) {
         m <- NULL
         set <- function(y) {
                 x <<- y
                 m <<- NULL
         }
         get <- function() x
-        setmean <- function(mean) m <<- mean
-        getmean <- function() m
+        setinv <- function(solve) m <<- solve
+        getinv<- function() m
         list(set = set, get = get,
-             setmean = setmean,
-             getmean = getmean)
-}
-
-## Write a short comment describing this function
-makeCacheMatrix <- function(x = matrix()) {
-
+             setinv = setinv,
+             getinv = getinv)
 }
 
 
-## From the example code
-cachemean <- function(x, ...) {
-        m <- x$getmean()
+
+## check whether inverse exists in m.  If so retieve from cache, if not calculate inverse.
+cacheSolve <- function(x, ...) {
+        ## Return a matrix that is the inverse of 'x'
+        m <- x$getinv()
         if(!is.null(m)) {
-                message("getting cached data")
+                message("getting cached matrix")
                 return(m)
         }
         data <- x$get()
-        m <- mean(data, ...)
-        x$setmean(m)
+        m <- solve(data, ...)
+        x$setinv(m)
         m
-}
-## Write a short comment describing this function
-
-cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
 }
